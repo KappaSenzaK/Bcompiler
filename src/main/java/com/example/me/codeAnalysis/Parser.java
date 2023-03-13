@@ -73,7 +73,6 @@ public class Parser {
         while (true) {
             int precedence = SyntaxFacts.getBinaryOperatorPrecedence(current().kind());
             if(precedence == 0 || precedence <= parentPrecedence) {
-                System.out.println("Sono entrato nel break");
                 break;
             }
 

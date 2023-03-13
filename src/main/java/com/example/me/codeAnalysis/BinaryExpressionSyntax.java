@@ -1,7 +1,6 @@
 package com.example.me.codeAnalysis;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 public final class BinaryExpressionSyntax extends ExpressionSyntax {
     private ExpressionSyntax left;
@@ -31,40 +30,8 @@ public final class BinaryExpressionSyntax extends ExpressionSyntax {
         return SyntaxKind.BINARY_EXPRESSION;
     }
 
-
     @Override
     public Iterable<SyntaxNode> getChildren() {
-        return new Iterable<SyntaxNode>() {
-            @Override
-            public Iterator<SyntaxNode> iterator() {
-                return new Iterator<SyntaxNode>() {
-                    private int index = 0;
-            
-                    @Override
-                    public boolean hasNext() {
-                        return index < 3;
-                    }
-            
-                    @Override
-                    public SyntaxNode next() {
-                        switch (index) {
-                            case 0:
-                                index++;
-                                return left;
-                            case 1:
-                                index++;
-                                return operatorToken;
-                            case 2:
-                                index++;
-                                return right;
-                            default:
-                                throw new NoSuchElementException();
-                        }
-                    }
-                };
-            }
-        };
+        return List.of(left, operatorToken, right);
     }
-
-    
 }

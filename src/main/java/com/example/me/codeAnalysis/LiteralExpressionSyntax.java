@@ -1,7 +1,6 @@
 package com.example.me.codeAnalysis;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 public final class LiteralExpressionSyntax extends ExpressionSyntax {
     private SyntaxToken literalToken;
@@ -25,28 +24,6 @@ public final class LiteralExpressionSyntax extends ExpressionSyntax {
 
     @Override
     public Iterable<SyntaxNode> getChildren() {
-        return new Iterable<SyntaxNode>() {
-            @Override
-            public Iterator<SyntaxNode> iterator() {
-                return new Iterator<SyntaxNode>() {
-                    private boolean hasMore = true;
-    
-                    @Override
-                    public boolean hasNext() {
-                        return hasMore;
-                    }
-    
-                    @Override
-                    public SyntaxNode next() {
-                        if (hasMore) {
-                            hasMore = false;
-                            return literalToken;
-                        } else {
-                            throw new NoSuchElementException();
-                        }
-                    }
-                };
-            }
-        };
+        return List.of(literalToken);
     }
 }

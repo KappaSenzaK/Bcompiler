@@ -1,7 +1,6 @@
 package com.example.me.codeAnalysis;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 public class ParanthesesExpressionSyntax extends ExpressionSyntax {
     private SyntaxNode openParenthesesToken;
@@ -12,7 +11,6 @@ public class ParanthesesExpressionSyntax extends ExpressionSyntax {
         this.openParenthesesToken = openParenthesesToken;
         this.expression = expression;
         this.closedParenthesestoken = closedParenthesestoken;
-
     }
 
     @Override
@@ -22,36 +20,7 @@ public class ParanthesesExpressionSyntax extends ExpressionSyntax {
 
     @Override
     public Iterable<SyntaxNode> getChildren() {
-        return new Iterable<SyntaxNode>() {
-            @Override
-            public Iterator<SyntaxNode> iterator() {
-                return new Iterator<SyntaxNode>() {
-                    private int index = 0;
-            
-                    @Override
-                    public boolean hasNext() {
-                        return index < 3;
-                    }
-            
-                    @Override
-                    public SyntaxNode next() {
-                        switch (index) {
-                            case 0:
-                                index++;
-                                return openParenthesesToken;
-                            case 1:
-                                index++;
-                                return expression;
-                            case 2:
-                                index++;
-                                return closedParenthesestoken;
-                            default:
-                                throw new NoSuchElementException();
-                        }
-                    }
-                };
-            }
-        };
+        return List.of(openParenthesesToken, expression, closedParenthesestoken);
     }
 
     public SyntaxNode getOpenParenthesesToken() {
