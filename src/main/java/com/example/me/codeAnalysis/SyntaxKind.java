@@ -1,7 +1,7 @@
 package com.example.me.codeAnalysis;
 
 public enum SyntaxKind {
-    //token
+    // token
     END_OF_FILE_TOKEN,
     BAD_TOKEN,
     WHITE_SPACE_TOKEN,
@@ -15,8 +15,9 @@ public enum SyntaxKind {
     OPEN_PARENTHESES_TOKEN,
     CLOSE_PARENTHESES_TOKEN,
 
-    //expressions
+    // expressions
     LITERAL_EXPRESSION,
+    UNARY_EXPRESSION,
     BINARY_EXPRESSION,
-    PARENTHESESED_EXPRESSION
+    PARENTHESESED_EXPRESSION,
 }

@@ -21,7 +21,7 @@ public class UnaryExpressionSyntax extends ExpressionSyntax {
 
     @Override
     public SyntaxKind kind() {
-        return SyntaxKind.BINARY_EXPRESSION;
+        return SyntaxKind.UNARY_EXPRESSION;
     }
 
     @Override

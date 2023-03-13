@@ -1,8 +1,12 @@
 package com.example.me;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import com.example.me.binding.Binder;
+import com.example.me.binding.BoundExpression;
 import com.example.me.codeAnalysis.Evaluator;
 import com.example.me.codeAnalysis.SyntaxNode;
 import com.example.me.codeAnalysis.SyntaxToken;
@@ -29,16 +33,22 @@ public class App {
                     continue;
                 }
 
-                if(line.equalsIgnoreCase("#cls")) {
-                    try{
+                if (line.equalsIgnoreCase("#cls")) {
+                    try {
                         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                    } catch (IOException | InterruptedException e){
+                    } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                     continue;
                 }
 
                 SyntaxTree syntaxTree = SyntaxTree.parse(line);
+                Binder binder = new Binder();
+                BoundExpression boundExpression = binder.bindExpression(syntaxTree.root());
+
+                List<String> diagnostics = new ArrayList<>();
+                diagnostics.addAll(syntaxTree.diagnostics());
+                diagnostics.addAll(binder.diagnostics());
 
                 if (showTree) {
                     System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
@@ -48,7 +58,7 @@ public class App {
                     System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
                 }
 
-                if (!syntaxTree.diagnostics().isEmpty()) {
+                if (!diagnostics.isEmpty()) {
                     System.out.print(ColorBackgrounds.ANSI_RED_BACKGROUND);
 
                     for (String diagnostic : syntaxTree.diagnostics()) {
@@ -57,7 +67,7 @@ public class App {
 
                     System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
                 } else {
-                    Evaluator evaluator = new Evaluator(syntaxTree.root());
+                    Evaluator evaluator = new Evaluator(boundExpression);
                     int result = evaluator.evaluate();
                     System.out.println(result);
                 }

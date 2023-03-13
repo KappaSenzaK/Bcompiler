@@ -1,9 +1,16 @@
 package com.example.me.codeAnalysis;
 
-public final class Evaluator {
-    private ExpressionSyntax root;
+import com.example.me.binding.BoundBinaryExpression;
+import com.example.me.binding.BoundBinaryOperatorKind;
+import com.example.me.binding.BoundExpression;
+import com.example.me.binding.BoundLiteralExpression;
+import com.example.me.binding.BoundUnaryExpression;
+import com.example.me.binding.BoundUnaryOperatorKind;
 
-    public Evaluator(ExpressionSyntax root) {
+public final class Evaluator {
+    private BoundExpression root;
+
+    public Evaluator(BoundExpression root) {
         this.root = root;
     }
 
@@ -11,34 +18,45 @@ public final class Evaluator {
         return evaluateExpression(root);
     }
 
-    private int evaluateExpression(ExpressionSyntax root) {
-        if (root instanceof LiteralExpressionSyntax n) {
-            return (int) n.getLiteralToken().getValue();
+    private int evaluateExpression(BoundExpression root) {
+        if (root instanceof BoundLiteralExpression n) {
+            return (int) n.getValue();
         }
 
-        if (root instanceof BinaryExpressionSyntax b) {
-            int left = evaluateExpression(b.getLeft());
-            int right = evaluateExpression(b.getRight());
+        if (root instanceof BoundUnaryExpression u) {
+            int operand = evaluateExpression(u.getOperand());
 
-            SyntaxKind operatorKind = b.getOperatorToken().getKind();
-
-            if(operatorKind == SyntaxKind.PLUS_TOKEN ){ 
-                return left + right;
-            } else if(operatorKind == SyntaxKind.MINUS_TOKEN) {
-                return left - right;
-            } else if(operatorKind == SyntaxKind.STAR_TOKEN) {
-                return left * right;
-            } else if(operatorKind == SyntaxKind.SLASH_TOKEN) {
-                return left / right;
-            } else {
-                throw new RuntimeException("Unexpected oprator token: " + operatorKind);
+            BoundUnaryOperatorKind kind = u.getOperatorKind();
+            switch (kind) {
+                case IDENTITY:
+                    return -operand;
+                case NEGATION:
+                    return +operand;
+                default:
+                    throw new RuntimeException("Unexpected unary operator token: " + kind);
             }
         }
 
-        if (root instanceof ParanthesesExpressionSyntax p) {
-            return evaluateExpression(p.getExpression());
+        if (root instanceof BoundBinaryExpression b) {
+            int left = evaluateExpression(b.getLeft());
+            int right = evaluateExpression(b.getRight());
+
+            BoundBinaryOperatorKind operatorKind = b.getOperatorKind();
+
+            switch (operatorKind) {
+                case ADDITION:
+                    return left + right;
+                case SUBTRACTION:
+                    return left - right;
+                case MULTIPLICATION:
+                    return left * right;
+                case DIVISION:
+                    return left / right;
+                default:
+                    throw new RuntimeException("Unexpected binary operator token: " + operatorKind);
+            }
         }
-        
+
         throw new RuntimeException("Unexpected node: " + root.kind());
     }
 }

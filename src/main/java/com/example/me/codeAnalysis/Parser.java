@@ -68,11 +68,19 @@ public class Parser {
     }
 
     private ExpressionSyntax parseExpression(int parentPrecedence) {
-        ExpressionSyntax left = parsePrimaryExpression();
+        ExpressionSyntax left;
+        int unaryOperatorPrecedence = SyntaxFacts.getUnaryOperatorPrecedence(current().kind());
+        if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence) {
+            SyntaxToken operatorToken = nextToken();
+            ExpressionSyntax operand = parseExpression(unaryOperatorPrecedence);
+            left = new UnaryExpressionSyntax(operatorToken, operand);
+        } else {
+            left = parsePrimaryExpression();
+        }
 
         while (true) {
             int precedence = SyntaxFacts.getBinaryOperatorPrecedence(current().kind());
-            if(precedence == 0 || precedence <= parentPrecedence) {
+            if (precedence == 0 || precedence <= parentPrecedence) {
                 break;
             }
 
