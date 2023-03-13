@@ -31,9 +31,7 @@ public class Binder {
     }
 
     private BoundExpression bindLiteralExpression(LiteralExpressionSyntax syntax) {
-        Integer value = syntax.getLiteralToken().getValue() instanceof Integer
-                ? (Integer) syntax.getLiteralToken().getValue()
-                : 0;
+        var value = syntax.getValue() != null ? syntax.getValue() : 0;
         return new BoundLiteralExpression(value);
     }
 

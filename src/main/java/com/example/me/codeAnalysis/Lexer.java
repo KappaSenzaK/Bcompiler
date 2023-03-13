@@ -41,7 +41,7 @@ public class Lexer {
 
             String whitespaces = this.text.substring(start, this.position);
 
-            return new SyntaxToken(SyntaxKind.WHITE_SPACE_TOKEN, start, whitespaces, whitespaces);
+            return new SyntaxToken(SyntaxKind.WHITE_SPACE_TOKEN, start, whitespaces, null);
         }
 
         if (Character.isDigit(current())) {
@@ -70,8 +70,9 @@ public class Lexer {
             }
 
             String subText = this.text.substring(start, this.position);
+            SyntaxKind kind = SyntaxFacts.getKeywordKind(subText);
 
-            return new SyntaxToken(SyntaxKind.STRING_TOKEN, start, subText, subText);
+            return new SyntaxToken(kind, start, subText, null);
         }
 
         switch (current()) {

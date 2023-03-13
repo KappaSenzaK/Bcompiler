@@ -5,6 +5,7 @@ public enum SyntaxKind {
     END_OF_FILE_TOKEN,
     BAD_TOKEN,
     WHITE_SPACE_TOKEN,
+    IDENTIFIER_TOKEN,
 
     NUMBER_TOKEN,
     STRING_TOKEN,
@@ -14,6 +15,10 @@ public enum SyntaxKind {
     SLASH_TOKEN,
     OPEN_PARENTHESES_TOKEN,
     CLOSE_PARENTHESES_TOKEN,
+
+    // keywords
+    FALSE_KEYWORD,
+    TRUE_KEYWORD,
 
     // expressions
     LITERAL_EXPRESSION,

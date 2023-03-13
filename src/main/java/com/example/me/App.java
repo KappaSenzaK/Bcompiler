@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import com.example.me.binding.Binder;
 import com.example.me.binding.BoundExpression;
@@ -46,9 +47,7 @@ public class App {
                 Binder binder = new Binder();
                 BoundExpression boundExpression = binder.bindExpression(syntaxTree.root());
 
-                List<String> diagnostics = new ArrayList<>();
-                diagnostics.addAll(syntaxTree.diagnostics());
-                diagnostics.addAll(binder.diagnostics());
+                List<String> diagnostics = Stream.concat(syntaxTree.diagnostics().stream(), binder.diagnostics().stream()).toList();
 
                 if (showTree) {
                     System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
@@ -61,14 +60,14 @@ public class App {
                 if (!diagnostics.isEmpty()) {
                     System.out.print(ColorBackgrounds.ANSI_RED_BACKGROUND);
 
-                    for (String diagnostic : syntaxTree.diagnostics()) {
+                    for (String diagnostic : diagnostics) {
                         System.out.println(diagnostic);
                     }
 
                     System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
                 } else {
                     Evaluator evaluator = new Evaluator(boundExpression);
-                    int result = evaluator.evaluate();
+                    var result = evaluator.evaluate();
                     System.out.println(result);
                 }
             }

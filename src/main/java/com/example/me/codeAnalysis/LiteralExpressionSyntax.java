@@ -4,9 +4,16 @@ import java.util.List;
 
 public final class LiteralExpressionSyntax extends ExpressionSyntax {
     private SyntaxToken literalToken;
+    private Object value;
+
+    public LiteralExpressionSyntax(SyntaxToken literalToken, Object value) {
+        this.literalToken = literalToken;
+        this.value = value;
+    }
 
     public LiteralExpressionSyntax(SyntaxToken literalToken) {
         this.literalToken = literalToken;
+        this.value = literalToken.getValue();
     }
 
     @Override
@@ -18,8 +25,8 @@ public final class LiteralExpressionSyntax extends ExpressionSyntax {
         return literalToken;
     }
 
-    public void setLiteralToken(SyntaxToken numberToken) {
-        this.literalToken = numberToken;
+    public Object getValue() {
+        return value;
     }
 
     @Override
