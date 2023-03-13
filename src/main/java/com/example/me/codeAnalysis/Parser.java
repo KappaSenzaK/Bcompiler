@@ -67,43 +67,34 @@ public class Parser {
         return new SyntaxTree(diagnostics, expression, endOfFileToken);
     }
 
-    private ExpressionSyntax parseExpression(){
-        return parseTerm();
-    }
-
-    protected ExpressionSyntax parseTerm() {
-        ExpressionSyntax left = parseFactor();
-
-        while (current().getKind() == SyntaxKind.PLUS_TOKEN || current().getKind() == SyntaxKind.MINUS_TOKEN
-                || current().kind() == SyntaxKind.STAR_TOKEN || current().kind() == SyntaxKind.SLASH_TOKEN) {
-            SyntaxToken operatorToken = nextToken();
-            ExpressionSyntax right = parseFactor();
-
-            left = new BinaryExpressionSyntax(left, operatorToken, right);
-        }
-
-        return left;
-    }
-
-    private ExpressionSyntax parseFactor() {
+    private ExpressionSyntax parseExpression(int parentPrecedence) {
         ExpressionSyntax left = parsePrimaryExpression();
 
-        while (current().kind() == SyntaxKind.STAR_TOKEN || current().kind() == SyntaxKind.SLASH_TOKEN) {
-            SyntaxToken operatorToken = nextToken();
-            ExpressionSyntax right = parsePrimaryExpression();
+        while (true) {
+            int precedence = SyntaxFacts.getBinaryOperatorPrecedence(current().kind());
+            if(precedence == 0 || precedence <= parentPrecedence) {
+                System.out.println("Sono entrato nel break");
+                break;
+            }
 
+            SyntaxToken operatorToken = nextToken();
+            ExpressionSyntax right = parseExpression(precedence);
             left = new BinaryExpressionSyntax(left, operatorToken, right);
         }
 
         return left;
+    }
+
+    private ExpressionSyntax parseExpression() {
+        return parseExpression(0);
     }
 
     private ExpressionSyntax parsePrimaryExpression() {
-        if(current().kind() == SyntaxKind.OPEN_PARENTHESES_TOKEN) {
+        if (current().kind() == SyntaxKind.OPEN_PARENTHESES_TOKEN) {
             SyntaxNode left = nextToken();
             ExpressionSyntax expression = parseExpression();
             SyntaxNode right = matchToken(SyntaxKind.CLOSE_PARENTHESES_TOKEN);
-            
+
             return new ParanthesesExpressionSyntax(left, expression, right);
         }
 

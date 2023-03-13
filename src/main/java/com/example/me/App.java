@@ -24,7 +24,7 @@ public class App {
                 String line = scanner.nextLine();
 
                 if (line.equalsIgnoreCase("#showTree")) {
-                    System.out.println(showTree ? "Showing the tree" : "Not showing the tree");
+                    System.out.println(showTree ? "Not showing the tree" : "Showing the tree");
                     showTree = !showTree;
                     continue;
                 }

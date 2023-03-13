@@ -3,34 +3,27 @@ package com.example.me.codeAnalysis;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class BinaryExpressionSyntax extends ExpressionSyntax {
-    private ExpressionSyntax left;
+public class UnaryExpressionSyntax extends ExpressionSyntax {
     private SyntaxToken operatorToken;
-    private ExpressionSyntax right;
-    
-    public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) {
-        this.left = left;
-        this.operatorToken = operatorToken;
-        this.right = right;
-    }
+    private ExpressionSyntax operand;
 
-    public ExpressionSyntax getLeft() {
-        return left;
+    public UnaryExpressionSyntax(SyntaxToken operatorToken, ExpressionSyntax operand) {
+        this.operatorToken = operatorToken;
+        this.operand = operand;
     }
 
     public SyntaxToken getOperatorToken() {
         return operatorToken;
     }
 
-    public ExpressionSyntax getRight() {
-        return right;
+    public ExpressionSyntax getOperand() {
+        return operand;
     }
 
     @Override
     public SyntaxKind kind() {
         return SyntaxKind.BINARY_EXPRESSION;
     }
-
 
     @Override
     public Iterable<SyntaxNode> getChildren() {
@@ -39,24 +32,21 @@ public final class BinaryExpressionSyntax extends ExpressionSyntax {
             public Iterator<SyntaxNode> iterator() {
                 return new Iterator<SyntaxNode>() {
                     private int index = 0;
-            
+
                     @Override
                     public boolean hasNext() {
-                        return index < 3;
+                        return index < 2;
                     }
-            
+
                     @Override
                     public SyntaxNode next() {
                         switch (index) {
                             case 0:
                                 index++;
-                                return left;
+                                return operatorToken;
                             case 1:
                                 index++;
-                                return operatorToken;
-                            case 2:
-                                index++;
-                                return right;
+                                return operand;
                             default:
                                 throw new NoSuchElementException();
                         }
@@ -65,6 +55,4 @@ public final class BinaryExpressionSyntax extends ExpressionSyntax {
             }
         };
     }
-
-    
 }
