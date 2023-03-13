@@ -12,7 +12,7 @@ public final class LiteralExpressionSyntax extends ExpressionSyntax {
 
     @Override
     public SyntaxKind kind() {
-        return SyntaxKind.NUMBER_EXPRESSION;
+        return SyntaxKind.LITERAL_EXPRESSION;
     }
     
     public SyntaxToken getLiteralToken() {

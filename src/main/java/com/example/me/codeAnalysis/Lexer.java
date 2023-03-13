@@ -12,7 +12,7 @@ public class Lexer {
         this.text = text;
     }
 
-    protected List<String> diagnostics(){
+    protected List<String> diagnostics() {
         return this.diagnostics;
     }
 
@@ -74,18 +74,19 @@ public class Lexer {
             return new SyntaxToken(SyntaxKind.STRING_TOKEN, start, subText, subText);
         }
 
-        if(current() == '+'){
-            return new SyntaxToken(SyntaxKind.PLUS_TOKEN, position++, "+", null);
-        } else if (current() == '-') {
-            return new SyntaxToken(SyntaxKind.MINUS_TOKEN, position++, "-", null);
-        } else if (current() == '*') {
-            return new SyntaxToken(SyntaxKind.STAR_TOKEN, position++, "*", null);
-        } else if (current() == '/') {
-            return new SyntaxToken(SyntaxKind.SLASH_TOKEN, position++, "/", null);
-        } else if (current() == '(') {
-            return new SyntaxToken(SyntaxKind.OPEN_PARENTHESES_TOKEN, position++, "(", null);
-        } else if (current() == ')') {
-            return new SyntaxToken(SyntaxKind.CLOSE_PARENTHESES_TOKEN, position++, ")", null);
+        switch (current()) {
+            case '+':
+                return new SyntaxToken(SyntaxKind.PLUS_TOKEN, position++, "+", null);
+            case '-':
+                return new SyntaxToken(SyntaxKind.MINUS_TOKEN, position++, "-", null);
+            case '*':
+                return new SyntaxToken(SyntaxKind.STAR_TOKEN, position++, "*", null);
+            case '/':
+                return new SyntaxToken(SyntaxKind.SLASH_TOKEN, position++, "/", null);
+            case '(':
+                return new SyntaxToken(SyntaxKind.OPEN_PARENTHESES_TOKEN, position++, "(", null);
+            case ')':
+                return new SyntaxToken(SyntaxKind.CLOSE_PARENTHESES_TOKEN, position++, ")", null);
         }
 
         diagnostics.add("ERROR: bad character input: " + "'" + current() + "'");
