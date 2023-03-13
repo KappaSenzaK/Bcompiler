@@ -3,11 +3,11 @@ package com.example.me.codeAnalysis;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class NumberExpressionSyntax extends ExpressionSyntax {
-    private SyntaxToken numberToken;
+public final class LiteralExpressionSyntax extends ExpressionSyntax {
+    private SyntaxToken literalToken;
 
-    public NumberExpressionSyntax(SyntaxToken numberToken) {
-        this.numberToken = numberToken;
+    public LiteralExpressionSyntax(SyntaxToken literalToken) {
+        this.literalToken = literalToken;
     }
 
     @Override
@@ -15,12 +15,12 @@ public final class NumberExpressionSyntax extends ExpressionSyntax {
         return SyntaxKind.NUMBER_EXPRESSION;
     }
     
-    public SyntaxToken getNumberToken() {
-        return numberToken;
+    public SyntaxToken getLiteralToken() {
+        return literalToken;
     }
 
-    public void setNumberToken(SyntaxToken numberToken) {
-        this.numberToken = numberToken;
+    public void setLiteralToken(SyntaxToken numberToken) {
+        this.literalToken = numberToken;
     }
 
     @Override
@@ -40,7 +40,7 @@ public final class NumberExpressionSyntax extends ExpressionSyntax {
                     public SyntaxNode next() {
                         if (hasMore) {
                             hasMore = false;
-                            return numberToken;
+                            return literalToken;
                         } else {
                             throw new NoSuchElementException();
                         }

@@ -2,7 +2,7 @@ package com.example.me.codeAnalysis;
 
 import java.util.List;
 
-public class SyntaxToken extends SyntaxNode {
+public final class SyntaxToken extends SyntaxNode {
     private SyntaxKind kind;
     private int position;
     private String text;

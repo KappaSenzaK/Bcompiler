@@ -79,7 +79,7 @@ public class App {
 
         System.out.println();
 
-        indent += isLast ? "    " : "│   ";
+        indent += isLast ? "   " : "│   ";
 
         SyntaxNode lastChild = lastOrDefault(node.getChildren());
 

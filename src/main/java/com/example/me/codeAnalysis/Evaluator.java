@@ -1,6 +1,6 @@
 package com.example.me.codeAnalysis;
 
-public class Evaluator {
+public final class Evaluator {
     private ExpressionSyntax root;
 
     public Evaluator(ExpressionSyntax root) {
@@ -12,8 +12,8 @@ public class Evaluator {
     }
 
     private int evaluateExpression(ExpressionSyntax root) {
-        if (root instanceof NumberExpressionSyntax n) {
-            return (int) n.getNumberToken().getValue();
+        if (root instanceof LiteralExpressionSyntax n) {
+            return (int) n.getLiteralToken().getValue();
         }
 
         if (root instanceof BinaryExpressionSyntax b) {

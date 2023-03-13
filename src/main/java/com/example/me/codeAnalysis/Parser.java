@@ -8,7 +8,7 @@ public class Parser {
     private int position;
     private List<String> diagnostics = new ArrayList<>();
 
-    public Parser(String text) {
+    protected Parser(String text) {
         Lexer lexer = new Lexer(text);
         List<SyntaxToken> listTokens = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class Parser {
         this.diagnostics.addAll(lexer.diagnostics());
     }
 
-    public List<String> diagnostics() {
+    protected List<String> diagnostics() {
         return this.diagnostics;
     }
 
@@ -52,7 +52,7 @@ public class Parser {
         return current;
     }
 
-    private SyntaxToken match(SyntaxKind kind) {
+    private SyntaxToken matchToken(SyntaxKind kind) {
         if (current().getKind() == kind) {
             return nextToken();
         }
@@ -61,13 +61,17 @@ public class Parser {
         return new SyntaxToken(kind, current().getPosition(), null, null);
     }
 
-    public SyntaxTree parse() {
-        ExpressionSyntax expression = parseTerm();
-        SyntaxToken endOfFileToken = match(SyntaxKind.END_OF_FILE_TOKEN);
+    protected SyntaxTree parse() {
+        ExpressionSyntax expression = parseExpression();
+        SyntaxToken endOfFileToken = matchToken(SyntaxKind.END_OF_FILE_TOKEN);
         return new SyntaxTree(diagnostics, expression, endOfFileToken);
     }
 
-    private ExpressionSyntax parseTerm() {
+    private ExpressionSyntax parseExpression(){
+        return parseTerm();
+    }
+
+    protected ExpressionSyntax parseTerm() {
         ExpressionSyntax left = parseFactor();
 
         while (current().getKind() == SyntaxKind.PLUS_TOKEN || current().getKind() == SyntaxKind.MINUS_TOKEN
@@ -79,10 +83,6 @@ public class Parser {
         }
 
         return left;
-    }
-
-    private ExpressionSyntax parseExpression(){
-        return parseTerm();
     }
 
     private ExpressionSyntax parseFactor() {
@@ -102,12 +102,12 @@ public class Parser {
         if(current().kind() == SyntaxKind.OPEN_PARENTHESES_TOKEN) {
             SyntaxNode left = nextToken();
             ExpressionSyntax expression = parseExpression();
-            SyntaxNode right = match(SyntaxKind.CLOSE_PARENTHESES_TOKEN);
+            SyntaxNode right = matchToken(SyntaxKind.CLOSE_PARENTHESES_TOKEN);
             
             return new ParanthesesExpressionSyntax(left, expression, right);
         }
 
-        SyntaxToken numberToken = match(SyntaxKind.NUMBER_TOKEN);
-        return new NumberExpressionSyntax(numberToken);
+        SyntaxToken numberToken = matchToken(SyntaxKind.NUMBER_TOKEN);
+        return new LiteralExpressionSyntax(numberToken);
     }
 }

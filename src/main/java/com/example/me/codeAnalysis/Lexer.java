@@ -8,11 +8,11 @@ public class Lexer {
     private int position;
     private List<String> diagnostics = new ArrayList<>();
 
-    public Lexer(String text) {
+    protected Lexer(String text) {
         this.text = text;
     }
 
-    public List<String> diagnostics(){
+    protected List<String> diagnostics(){
         return this.diagnostics;
     }
 
@@ -27,7 +27,7 @@ public class Lexer {
         this.position++;
     }
 
-    public SyntaxToken lex() {
+    protected SyntaxToken lex() {
         if (this.position >= this.text.length()) {
             return new SyntaxToken(SyntaxKind.END_OF_FILE_TOKEN, position, "\0", null);
         }
@@ -92,7 +92,7 @@ public class Lexer {
         return new SyntaxToken(SyntaxKind.BAD_TOKEN, position++, this.text.substring(this.position - 1, 1), null);
     }
 
-    public String getText() {
+    protected String getText() {
         return text;
     }
 }

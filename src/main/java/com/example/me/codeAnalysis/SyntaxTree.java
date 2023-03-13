@@ -2,7 +2,7 @@ package com.example.me.codeAnalysis;
 
 import java.util.List;
 
-public class SyntaxTree {
+public final class SyntaxTree {
     private List<String> diagnostics;
     private ExpressionSyntax root;
     private SyntaxToken endOfFileToken;
