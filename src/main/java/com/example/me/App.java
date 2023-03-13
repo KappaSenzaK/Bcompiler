@@ -1,7 +1,12 @@
 package com.example.me;
 
+import java.io.IOException;
 import java.util.Scanner;
 
+import com.example.me.codeAnalysis.Evaluator;
+import com.example.me.codeAnalysis.SyntaxNode;
+import com.example.me.codeAnalysis.SyntaxToken;
+import com.example.me.codeAnalysis.SyntaxTree;
 import com.example.me.utils.ColorBackgrounds;
 
 /**
@@ -10,27 +15,53 @@ import com.example.me.utils.ColorBackgrounds;
  */
 public class App {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("> ");
-        String line = scanner.nextLine();
-        scanner.close();
+        boolean showTree = false;
 
-        Parser parser = new Parser(line);
-        SyntaxTree syntaxTree = parser.parse();
-        System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                System.out.println(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+                System.out.print("> ");
+                String line = scanner.nextLine();
 
-        prettyPrint(syntaxTree.root());
+                if (line.equalsIgnoreCase("#showTree")) {
+                    System.out.println(showTree ? "Showing the tree" : "Not showing the tree");
+                    showTree = !showTree;
+                    continue;
+                }
 
-        System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+                if(line.equalsIgnoreCase("#cls")) {
+                    try{
+                        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                    } catch (IOException | InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
 
-        if(!parser.diagnostics().isEmpty()) {
-            System.out.print(ColorBackgrounds.ANSI_RED_BACKGROUND);
+                SyntaxTree syntaxTree = SyntaxTree.parse(line);
 
-            for(String diagnostic : parser.diagnostics()) {
-                System.out.println(diagnostic);
+                if (showTree) {
+                    System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+
+                    prettyPrint(syntaxTree.root());
+
+                    System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+                }
+
+                if (!syntaxTree.diagnostics().isEmpty()) {
+                    System.out.print(ColorBackgrounds.ANSI_RED_BACKGROUND);
+
+                    for (String diagnostic : syntaxTree.diagnostics()) {
+                        System.out.println(diagnostic);
+                    }
+
+                    System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
+                } else {
+                    Evaluator evaluator = new Evaluator(syntaxTree.root());
+                    int result = evaluator.evaluate();
+                    System.out.println(result);
+                }
             }
-
-            System.out.print(ColorBackgrounds.ANSI_BLACK_BACKGROUND);
         }
     }
 
@@ -56,14 +87,14 @@ public class App {
             prettyPrint(child, indent, child.equals(lastChild));
         }
     }
-    
+
     public static void prettyPrint(SyntaxNode node) {
         prettyPrint(node, "", true);
     }
 
     private static SyntaxNode lastOrDefault(Iterable<SyntaxNode> children) {
         SyntaxNode lastChild = null;
-        for(SyntaxNode child : children) {
+        for (SyntaxNode child : children) {
             lastChild = child;
         }
         return lastChild;

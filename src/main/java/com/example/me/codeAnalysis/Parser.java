@@ -1,4 +1,4 @@
-package com.example.me;
+package com.example.me.codeAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +8,18 @@ public class Parser {
     private int position;
     private List<String> diagnostics = new ArrayList<>();
 
-    public Parser(String text) { 
+    public Parser(String text) {
         Lexer lexer = new Lexer(text);
         List<SyntaxToken> listTokens = new ArrayList<>();
 
-        while(true){
+        while (true) {
             SyntaxToken token = lexer.lex();
 
             if (token.getKind() != SyntaxKind.BAD_TOKEN && token.getKind() != SyntaxKind.WHITE_SPACE_TOKEN) {
                 listTokens.add(token);
             }
 
-            if(token.getKind() == SyntaxKind.END_OF_FILE_TOKEN) {
+            if (token.getKind() == SyntaxKind.END_OF_FILE_TOKEN) {
                 break;
             }
         }
@@ -29,13 +29,13 @@ public class Parser {
         this.diagnostics.addAll(lexer.diagnostics());
     }
 
-    public List<String> diagnostics(){
+    public List<String> diagnostics() {
         return this.diagnostics;
     }
 
     private SyntaxToken peek(int offset) {
         int index = position + offset;
-        if(index >= tokens.length) {
+        if (index >= tokens.length) {
             return tokens[tokens.length - 1];
         }
 
@@ -62,15 +62,33 @@ public class Parser {
     }
 
     public SyntaxTree parse() {
-        ExpressionSyntax expression = parsePrimary();
+        ExpressionSyntax expression = parseTerm();
         SyntaxToken endOfFileToken = match(SyntaxKind.END_OF_FILE_TOKEN);
         return new SyntaxTree(diagnostics, expression, endOfFileToken);
     }
 
-    private ExpressionSyntax parsePrimary(){
+    private ExpressionSyntax parseTerm() {
+        ExpressionSyntax left = parseFactor();
+
+        while (current().getKind() == SyntaxKind.PLUS_TOKEN || current().getKind() == SyntaxKind.MINUS_TOKEN
+                || current().kind() == SyntaxKind.STAR_TOKEN || current().kind() == SyntaxKind.SLASH_TOKEN) {
+            SyntaxToken operatorToken = nextToken();
+            ExpressionSyntax right = parseFactor();
+
+            left = new BinaryExpressionSyntax(left, operatorToken, right);
+        }
+
+        return left;
+    }
+
+    private ExpressionSyntax parseExpression(){
+        return parseTerm();
+    }
+
+    private ExpressionSyntax parseFactor() {
         ExpressionSyntax left = parsePrimaryExpression();
 
-        while (current().getKind() == SyntaxKind.PLUS_TOKEN || current().getKind() == SyntaxKind.MINUS_TOKEN) {
+        while (current().kind() == SyntaxKind.STAR_TOKEN || current().kind() == SyntaxKind.SLASH_TOKEN) {
             SyntaxToken operatorToken = nextToken();
             ExpressionSyntax right = parsePrimaryExpression();
 
@@ -78,9 +96,17 @@ public class Parser {
         }
 
         return left;
-    } 
+    }
 
     private ExpressionSyntax parsePrimaryExpression() {
+        if(current().kind() == SyntaxKind.OPEN_PARENTHESES_TOKEN) {
+            SyntaxNode left = nextToken();
+            ExpressionSyntax expression = parseExpression();
+            SyntaxNode right = match(SyntaxKind.CLOSE_PARENTHESES_TOKEN);
+            
+            return new ParanthesesExpressionSyntax(left, expression, right);
+        }
+
         SyntaxToken numberToken = match(SyntaxKind.NUMBER_TOKEN);
         return new NumberExpressionSyntax(numberToken);
     }

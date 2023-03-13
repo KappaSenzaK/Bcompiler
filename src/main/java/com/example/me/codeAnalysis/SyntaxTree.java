@@ -1,4 +1,4 @@
-package com.example.me;
+package com.example.me.codeAnalysis;
 
 import java.util.List;
 
@@ -13,7 +13,12 @@ public class SyntaxTree {
         this.endOfFileToken = endOfFileToken;
     }
 
-    public List<String> getDiagnostics() {
+    public static SyntaxTree parse(String text){
+        Parser parser = new Parser(text);
+        return parser.parse();
+    }
+
+    public List<String> diagnostics() {
         return diagnostics;
     }
 

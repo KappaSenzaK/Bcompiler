@@ -1,4 +1,4 @@
-package com.example.me;
+package com.example.me.codeAnalysis;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

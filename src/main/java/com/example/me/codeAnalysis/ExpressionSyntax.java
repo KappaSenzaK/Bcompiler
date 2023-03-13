@@ -1,4 +1,4 @@
-package com.example.me;
+package com.example.me.codeAnalysis;
 
 public abstract class ExpressionSyntax extends SyntaxNode {
     
