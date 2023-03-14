@@ -1,5 +1,4 @@
-package com.example.me.codeAnalysis;
-
+package com.example.me.codeanalysis;
 public enum SyntaxKind {
     // token
     END_OF_FILE_TOKEN,

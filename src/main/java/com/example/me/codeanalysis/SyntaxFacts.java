@@ -1,4 +1,4 @@
-package com.example.me.codeAnalysis;
+package com.example.me.codeanalysis;
 
 public final class SyntaxFacts {
     public static int getUnaryOperatorPrecedence(SyntaxKind kind) {

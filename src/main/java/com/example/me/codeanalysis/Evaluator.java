@@ -1,4 +1,4 @@
-package com.example.me.codeAnalysis;
+package com.example.me.codeanalysis;
 
 import com.example.me.binding.BoundBinaryExpression;
 import com.example.me.binding.BoundBinaryOperatorKind;
