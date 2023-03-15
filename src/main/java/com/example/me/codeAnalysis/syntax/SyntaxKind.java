@@ -1,0 +1,31 @@
+package com.example.me.codeanalysis.syntax;
+
+public enum SyntaxKind {
+    // token
+    END_OF_FILE_TOKEN,
+    BAD_TOKEN,
+    WHITE_SPACE_TOKEN,
+    IDENTIFIER_TOKEN,
+
+    NUMBER_TOKEN,
+    STRING_TOKEN,
+    PLUS_TOKEN,
+    MINUS_TOKEN,
+    STAR_TOKEN,
+    SLASH_TOKEN,
+    OPEN_PARENTHESES_TOKEN,
+    CLOSE_PARENTHESES_TOKEN,
+    BANG_TOKEN,
+    AMPERSEND_AMPERSEND_TOKEN,
+    PIPE_PIPE_TOKEN,
+
+    // keywords
+    FALSE_KEYWORD,
+    TRUE_KEYWORD,
+
+    // expressions
+    LITERAL_EXPRESSION,
+    UNARY_EXPRESSION,
+    BINARY_EXPRESSION,
+    PARENTHESESED_EXPRESSION,
+}

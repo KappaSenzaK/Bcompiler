@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-import com.example.me.binding.Binder;
-import com.example.me.binding.BoundExpression;
-import com.example.me.codeAnalysis.Evaluator;
-import com.example.me.codeAnalysis.SyntaxNode;
-import com.example.me.codeAnalysis.SyntaxToken;
-import com.example.me.codeAnalysis.SyntaxTree;
+import com.example.me.codeanalysis.Evaluator;
+import com.example.me.codeanalysis.binding.Binder;
+import com.example.me.codeanalysis.binding.BoundExpression;
+import com.example.me.codeanalysis.syntax.SyntaxNode;
+import com.example.me.codeanalysis.syntax.SyntaxToken;
+import com.example.me.codeanalysis.syntax.SyntaxTree;
 import com.example.me.utils.ColorBackgrounds;
 
 /**
