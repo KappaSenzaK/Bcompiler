@@ -69,6 +69,7 @@ public class Binder {
                     return BoundUnaryOperatorKind.IDENTITY;
                 case MINUS_TOKEN:
                     return BoundUnaryOperatorKind.NEGATION;
+                    default:
             }
         }
 
@@ -76,6 +77,7 @@ public class Binder {
             switch (kind) {
                 case BANG_TOKEN:
                     return BoundUnaryOperatorKind.LOGICAL_NEGATION;
+                    default:
             }
         }
 
@@ -93,6 +95,7 @@ public class Binder {
                     return BoundBinaryOperatorKind.MULTIPLICATION;
                 case SLASH_TOKEN:
                     return BoundBinaryOperatorKind.DIVISION;
+                default:
             }
         }
 
@@ -102,6 +105,7 @@ public class Binder {
                     return BoundBinaryOperatorKind.LOGICAL_AND;
                 case PIPE_PIPE_TOKEN: 
                     return BoundBinaryOperatorKind.LOGICAL_OR;
+                default: 
             }
         }
 
